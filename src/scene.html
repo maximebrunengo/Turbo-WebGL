@@ -17,9 +17,9 @@
 
 			// Add the camera
 			var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
-			camera.position.z = 10;
-			camera.position.y = -7;
-			camera.rotation.x = 0.5;
+			camera.position.z = 20;
+			camera.position.y = -30;
+			camera.rotation.x = 1;
 
 			// Add scene elements
     		addSceneElements();
@@ -38,36 +38,48 @@
 			// Main functions
 			function addSceneElements(){
 				// Create the ground
-				var groundGeometry = new THREE.BoxGeometry( 15, 15, 0.2 );
+				var groundGeometry = new THREE.BoxGeometry( 50, 50, 0.2 );
 				var groundMaterial = new THREE.MeshBasicMaterial( { color: 0xffffff } );
 				var ground = new THREE.Mesh( groundGeometry, groundMaterial );
 				scene.add( ground );
 
 
 				// Create the cube
-				var cubeGeometry = new THREE.BoxGeometry( 1, 1, 1 );
-				var cubeMaterial = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
-				var cube = new THREE.Mesh( cubeGeometry, cubeMaterial );
-				scene.add( cube );
+				//var cubeGeometry = new THREE.BoxGeometry( 1, 1, 1 );
+				//var cubeMaterial = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+				//var cube = new THREE.Mesh( cubeGeometry, cubeMaterial );
+				//scene.add( cube );
 
 				//Add trees
+				var geometryTrunk = new THREE.CylinderGeometry( 0.1, 0.5, 2); //(radiusTop, radiusBottom, height);
+				var materialTrunk = new THREE.MeshBasicMaterial( {color: 0x4d2600} );
 
-				//(radiusTop, radiusBottom, height);
-				var geometry = new THREE.CylinderGeometry( 0.1, 0.5, 2); 
-				var material = new THREE.MeshBasicMaterial( {color: 0x4d2600} );
-				var trunk = new THREE.Mesh( geometry, material );
-				trunk.position.setX(2);
-				trunk.position.setY(5);
-				trunk.rotation.x = 3.14 / 2;
-				scene.add( trunk );
+				var geometrySphere = new THREE.SphereGeometry(1);
+				var materialSphere = new THREE.MeshBasicMaterial( {color: 0x009900} );
+				var Z = 10;
+				var mx=5;
+				var my=5;
+				for (var i=0;i<20;i++)
+				{
+					var mx=Math.random()*50;
+					var my=Math.random()*50;
+					var trunk = new THREE.Mesh( geometryTrunk, materialTrunk );
+					trunk.position.x=mx-25;
+					trunk.position.y=my-25;
+					trunk.rotation.x = Math.PI / 2;
+					scene.add( trunk );
+					
 
-				var geometry = new THREE.SphereGeometry(1);
-				var material = new THREE.MeshBasicMaterial( {color: 0x006600} );
-				var sphere = new THREE.Mesh( geometry, material );
-				sphere.position.setX(2);
-				sphere.position.setY(5);
-				sphere.position.setZ(2);
-				scene.add( sphere );
+				
+					var sphere = new THREE.Mesh( geometrySphere, materialSphere );
+					sphere.position.x=mx-25;
+					sphere.position.y=my-25;
+					sphere.position.setZ(2);
+					scene.add( sphere );
+					//mx=mx-5;
+					//my=my-5;
+				}
+				
 
 			}
 
