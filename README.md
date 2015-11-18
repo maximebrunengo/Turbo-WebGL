@@ -1,7 +1,7 @@
 # Turbo-WebGL
 
 Projet dans le cadre d'un TP sur le WebGL :
-Tango
+Turbo
 Jeu de Snake 3D
 
 - Déplacement du serpent sur un quadrillage
