@@ -29,7 +29,7 @@
 
     		// Create the WebGL renderer
 			var renderer = new THREE.WebGLRenderer();
-			renderer.setSize( window.innerWidth/2, window.innerHeight );
+			renderer.setSize( window.innerWidth, window.innerHeight );
 
 			// Append the renderer to the body
 			document.body.appendChild( renderer.domElement );
@@ -49,6 +49,26 @@
 				var cubeMaterial = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
 				var cube = new THREE.Mesh( cubeGeometry, cubeMaterial );
 				scene.add( cube );
+
+				//Add trees
+
+				//(radiusTop, radiusBottom, height);
+				var geometry = new THREE.CylinderGeometry( 0.1, 0.5, 2); 
+				var material = new THREE.MeshBasicMaterial( {color: 0x4d2600} );
+				var trunk = new THREE.Mesh( geometry, material );
+				trunk.position.setX(2);
+				trunk.position.setY(5);
+				trunk.rotation.x = 3.14 / 2;
+				scene.add( trunk );
+
+				var geometry = new THREE.SphereGeometry(1);
+				var material = new THREE.MeshBasicMaterial( {color: 0x006600} );
+				var sphere = new THREE.Mesh( geometry, material );
+				sphere.position.setX(2);
+				sphere.position.setY(5);
+				sphere.position.setZ(2);
+				scene.add( sphere );
+
 			}
 
 			function addLights(){
