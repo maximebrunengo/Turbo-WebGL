@@ -10,14 +10,16 @@
 	</head>
 	<body>
 		<script src="js/three.min.js"></script>
-		<script src="js/three-light-tut.js"></script>
 		<script>
 
 			// Create the scene
 			var scene = new THREE.Scene();
 
 			// Add the camera
-			addCamera();
+			var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+			camera.position.z = 10;
+			camera.position.y = -7;
+			camera.rotation.x = 0.5;
 
 			// Add scene elements
     		addSceneElements();
@@ -25,17 +27,15 @@
 			// Add lights
     		addLights();
 
+    		// Create the WebGL renderer
 			var renderer = new THREE.WebGLRenderer();
 			renderer.setSize( window.innerWidth/2, window.innerHeight );
+
+			// Append the renderer to the body
 			document.body.appendChild( renderer.domElement );
 
-			function addCamera(){
-				var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
-				camera.position.z = 10;
-				camera.position.y = -7;
-				camera.rotation.x = 0.5;
-			}
 
+			// Main functions
 			function addSceneElements(){
 				// Create the ground
 				var groundGeometry = new THREE.BoxGeometry( 15, 15, 0.2 );
