@@ -28,7 +28,7 @@
 
 			// Add the camera
 			var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
-			camera.position.set(0, -10, 6); 
+			camera.position.set(0, -30, 30);
 			camera.lookAt(scene.position);
 			scene.add(camera); 
 
@@ -83,9 +83,7 @@
 					trunk.position.y=my-25;
 					trunk.rotation.x = Math.PI / 2;
 					scene.add( trunk );
-					
 
-				
 					var sphere = new THREE.Mesh( geometrySphere, materialSphere );
 					sphere.position.x=mx-25;
 					sphere.position.y=my-25;
@@ -131,7 +129,7 @@
 				if(debug == true)
 				{
 					console.log('test');
-				}	
+				}
 				// Ambient light has no direction, it illuminates every object with the same 
 				// intensity. If only ambient light is used, no shading effects will occur. 
 				var ambientLight = new THREE.AmbientLight(0x101010, 1.0); 
@@ -146,13 +144,11 @@
 				directionalLight.shadowCameraVisible = true;
 				directionalLight.shadowDarkness = 0.5;
 				scene.add(directionalLight);
-
-
 			}
 
 			function checkKey(e) 
 			{
-			    e = e || window.event;
+				e = e || window.event;
 				var distance = 1;
 
 				if (e.keyCode == '90')
