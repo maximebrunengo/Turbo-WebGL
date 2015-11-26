@@ -12,6 +12,13 @@
 		<script src="js/three.min.js"></script>
 		<script src="js/lights/AmbientLight.js"></script>
 		<script>
+			// Global variables
+			var snakeCubeArray = [];
+			var snakeForwardDirection = new THREE.Vector3(1,0,0);
+			var clock = new THREE.Clock(true);
+			var elapsedTime = 0;
+			var tickDelta = 0.5 // 500ms
+
 			// Debug or not
 			var debug = true;
 
@@ -26,6 +33,9 @@
 
 			// Add scene elements
     		addSceneElements();
+
+			// Add Snake
+			initializeSnake();
 
 			// Add lights
     		addLights();
@@ -49,14 +59,6 @@
 				var ground = new THREE.Mesh( groundGeometry, groundMaterial );
 				scene.add( ground );
 
-
-				// Create the cube
-				var cubeGeometry = new THREE.BoxGeometry( 1, 1, 1 );
-				var cubeMaterial = new THREE.MeshBasicMaterial( { color: 0xffffff } );
-				var cube = new THREE.Mesh( cubeGeometry, cubeMaterial );
-				cubeGeometry.translate(0,0,1);
-				scene.add( cube );
-
 				//Add trees
 
 				//(radiusTop, radiusBottom, height);
@@ -75,7 +77,36 @@
 				sphere.position.setY(5);
 				sphere.position.setZ(2);
 				scene.add( sphere );
+			}
 
+			function initializeSnake()
+			{
+				// Create the snake
+				var cubeGeometry = new THREE.BoxGeometry( 1, 1, 1 );
+				var cubeMaterial = new THREE.MeshPhongMaterial( { color: 0xff0000 } );
+
+				var initialSnakeLength = 3;
+				for (var i = 0; i < initialSnakeLength; i++)
+				{
+					var cube = new THREE.Mesh( cubeGeometry, cubeMaterial );
+					cube.position.set(initialSnakeLength-i, 0, 0.5);
+					snakeCubeArray.push(cube);
+					scene.add(snakeCubeArray[i]);
+				}
+			}
+
+			function moveSnakeForward()
+			{
+				// Check if the snake is eating something
+				// Increment snake length
+				// TODO
+
+				// Put the last piece in the front
+				snakeCubeArray.splice(0, 0, snakeCubeArray.pop());
+
+				// Move head in the forward forwardDirection
+				snakeCubeArray[0].position.copy(snakeCubeArray[1].position);
+				snakeCubeArray[0].position.add(snakeForwardDirection);
 			}
 
 			function addLights(){
@@ -129,10 +160,52 @@
 			       camera.translateX(-1);
 			    }
 
+				else if (e.keyCode == '37')
+				{
+					// LEFT ARROW
+					if(debug == true)
+					{
+						  console.log('left arrow');
+					}
+					snakeForwardDirection.set(-1,0,0);
+				}
+				else if (e.keyCode == '38')
+				{
+					// UP ARROW
+					if(debug == true)
+					{
+						  console.log('up arrow');
+					}
+					snakeForwardDirection.set(0,1,0);
+				}
+				else if (e.keyCode == '39')
+				{
+					// RIGHT ARROW
+					if(debug == true)
+					{
+						  console.log('right arrow');
+					}
+					snakeForwardDirection.set(1,0,0);
+				}
+				else if (e.keyCode == '40')
+				{
+					// DOWN ARROW
+					if(debug == true)
+					{
+						  console.log('down arrow');
+					}
+					snakeForwardDirection.set(0,-1,0);
+				}
 			}
 
 			function render() {
 				requestAnimationFrame( render );
+				elapsedTime += clock.getDelta();
+				if( elapsedTime > tickDelta)
+				{
+					moveSnakeForward();
+					elapsedTime = 0.0;
+				}
 
 				renderer.render( scene, camera );
 			}
