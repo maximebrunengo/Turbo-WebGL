@@ -32,15 +32,15 @@
 			camera.rotation.x = 0.5;
 
 			// Add scene elements
-    		addSceneElements();
+			addSceneElements();
 
 			// Add Snake
 			initializeSnake();
 
 			// Add lights
-    		addLights();
+			addLights();
 
-    		// Create the WebGL renderer
+			// Create the WebGL renderer
 			var renderer = new THREE.WebGLRenderer();
 			renderer.setSize( window.innerWidth, window.innerHeight );
 
@@ -52,7 +52,8 @@
 			render();
 
 			// Main functions
-			function addSceneElements(){
+			function addSceneElements()
+			{
 				// Create the ground
 				var groundGeometry = new THREE.BoxGeometry( 15, 15, 0.2 );
 				var groundMaterial = new THREE.MeshBasicMaterial( { color: 0x5FB404 } );
@@ -109,57 +110,57 @@
 				snakeCubeArray[0].position.add(snakeForwardDirection);
 			}
 
-			function addLights(){
+			function addLights()
+			{
 				if(debug == true)
 				{
 					console.log('test');
-				}	
+				}
 				var light = new THREE.PointLight( 0xFFFF00 );
-			    light.position.set( 10, 0, 10 );
-			    scene.add( light );
+				light.position.set( 10, 0, 10 );
+				scene.add( light );
 			}
 
 			function checkKey(e) 
 			{
-			    e = e || window.event;
+				e = e || window.event;
 
-			    if (e.keyCode == '90') 
-			    {
-			        // z
-			        if(debug == true)
+				if (e.keyCode == '90')
+				{
+					// z
+					if(debug == true)
 					{
-			        	console.log('up arrow');
-			    	}
-			    	camera.translateZ(1);
-			    }
-			    else if (e.keyCode == '83') 
-			    {
-			        // s
-			        if(debug == true)
-			        {
-						console.log('down arrow');
-			        }
-			        camera.translateZ(-1);
-			    }
-			    else if (e.keyCode == '81') 
-			    {
-			       // q
-			       if(debug == true)
-			       {
-			       		console.log('left arrow');
-			       }
-			       camera.translateX(1);
-			    }
-			    else if (e.keyCode == '68') 
-			    {
-			       // d
-			       if(debug == true)
-			       {
-			        	console.log('right arrow');
-			       }
-			       camera.translateX(-1);
-			    }
-
+						console.log('Z');
+					}
+					camera.translateZ(1);
+				}
+				else if (e.keyCode == '83')
+				{
+					// s
+					if(debug == true)
+					{
+						console.log('S');
+					}
+					camera.translateZ(-1);
+				}
+				else if (e.keyCode == '81')
+				{
+					// q
+					if(debug == true)
+					{
+						console.log('Q');
+					}
+				      camera.translateX(1);
+				}
+				else if (e.keyCode == '68')
+				{
+					// d
+					if(debug == true)
+					{
+						  console.log('D');
+					}
+					camera.translateX(-1);
+				}
 				else if (e.keyCode == '37')
 				{
 					// LEFT ARROW
@@ -198,7 +199,8 @@
 				}
 			}
 
-			function render() {
+			function render()
+			{
 				requestAnimationFrame( render );
 				elapsedTime += clock.getDelta();
 				if( elapsedTime > tickDelta)
