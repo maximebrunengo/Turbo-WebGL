@@ -18,7 +18,10 @@
 			var snakeForwardDirection = new THREE.Vector3(1,0,0);
 			var clock = new THREE.Clock(true);
 			var elapsedTime = 0;
-			var tickDelta = 0.5 // 500ms
+			var tickDelta = 0.25 // 250ms
+			// TODO: Remove when apples are added to the scene
+			// This variable is used to simulate an apple eaten with the space bar
+			var appleEaten = false;
 
 			// Debug or not
 			var debug = false;
@@ -110,18 +113,37 @@
 				}
 			}
 
+			function checkItemEaten()
+			{
+				if(appleEaten == true)
+				{
+					// TODO: Replace with checking if the head
+					// is on an apple or not
+					appleEaten = false;
+					return true;
+				}
+			}
+
 			function moveSnakeForward()
 			{
 				// Check if the snake is eating something
 				// Increment snake length
-				// TODO
+				if(checkItemEaten() == true)
+				{
+// 					var cube = new THREE.Mesh( cubeGeometry, cubeMaterial );
+					var cube = new THREE.Mesh( snakeCubeArray[0].geometry, snakeCubeArray[0].material );
+					snakeCubeArray.splice(0, 0, cube);
+					scene.add(snakeCubeArray[0]);
+				}
+				else
+				{
+					// Put the last piece in the front
+					snakeCubeArray.splice(0, 0, snakeCubeArray.pop());
+				}
+					// Move head in the forward forwardDirection
+					snakeCubeArray[0].position.copy(snakeCubeArray[1].position);
+					snakeCubeArray[0].position.add(snakeForwardDirection);
 
-				// Put the last piece in the front
-				snakeCubeArray.splice(0, 0, snakeCubeArray.pop());
-
-				// Move head in the forward forwardDirection
-				snakeCubeArray[0].position.copy(snakeCubeArray[1].position);
-				snakeCubeArray[0].position.add(snakeForwardDirection);
 			}
 
 			function addLights()
@@ -183,7 +205,7 @@
 					// d
 					if(debug == true)
 					{
-						  console.log('d');
+						console.log('d');
 					}
 					camera.translateX(-distance);
 				}
@@ -192,7 +214,7 @@
 					// LEFT ARROW
 					if(debug == true)
 					{
-						  console.log('left arrow');
+						console.log('left arrow');
 					}
 					snakeForwardDirection.set(-1,0,0);
 				}
@@ -201,7 +223,7 @@
 					// UP ARROW
 					if(debug == true)
 					{
-						  console.log('up arrow');
+						console.log('up arrow');
 					}
 					snakeForwardDirection.set(0,1,0);
 				}
@@ -210,7 +232,7 @@
 					// RIGHT ARROW
 					if(debug == true)
 					{
-						  console.log('right arrow');
+						console.log('right arrow');
 					}
 					snakeForwardDirection.set(1,0,0);
 				}
@@ -219,9 +241,19 @@
 					// DOWN ARROW
 					if(debug == true)
 					{
-						  console.log('down arrow');
+						console.log('down arrow');
 					}
 					snakeForwardDirection.set(0,-1,0);
+				}
+				else if (e.keyCode == '32')
+				{
+					// SPACE BAR
+					if(debug == true)
+					{
+						console.log('space bar');
+					}
+					// TODO: Remove this when apples are added on the scene
+					appleEaten = true;
 				}
 			}
 
