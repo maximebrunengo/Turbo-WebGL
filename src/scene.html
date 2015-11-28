@@ -18,10 +18,14 @@
 			var snakeForwardDirection = new THREE.Vector3(1,0,0);
 			var clock = new THREE.Clock(true);
 			var elapsedTime = 0;
-			var tickDelta = 0.25 // 250ms
+			var tickDelta = 0.25; // 250ms
 			// TODO: Remove when apples are added to the scene
 			// This variable is used to simulate an apple eaten with the space bar
 			var appleEaten = false;
+
+			// TODO: Delete when collisions are developped
+			// This variable is used to simulate an apple created
+			var createApple = false;
 
 			// Debug or not
 			var debug = false;
@@ -124,6 +128,17 @@
 				}
 			}
 
+			function checkGenerationApple()
+			{
+				if(createApple == true)
+				{
+					// TODO: Replace with checking if the head
+					// is on an apple or not
+					createApple = false;
+					return true;
+				}
+			}
+
 			function moveSnakeForward()
 			{
 				// Check if the snake is eating something
@@ -144,6 +159,28 @@
 					snakeCubeArray[0].position.copy(snakeCubeArray[1].position);
 					snakeCubeArray[0].position.add(snakeForwardDirection);
 
+			}
+
+			function addApple()
+			{
+				// Create an apple
+				// Create the snake
+				console.log('Apple created');
+				if(checkGenerationApple() == true)
+				{
+					var geometry = new THREE.SphereGeometry( 0.5, 32, 32 );
+					var material = new THREE.MeshBasicMaterial( {color: 0xff0000} );
+					var sphere = new THREE.Mesh( geometry, material );
+
+					var mx=Math.random()*50;
+					var my=Math.random()*50;
+					sphere.position.x = mx-25;
+					sphere.position.y = my-25;
+					sphere.position.z = 0;
+
+					scene.add( sphere );
+					createApple = false;
+				}
 			}
 
 			function addLights()
@@ -255,6 +292,16 @@
 					// TODO: Remove this when apples are added on the scene
 					appleEaten = true;
 				}
+				else if (e.keyCode == '80')
+				{
+					// P
+					if(debug == true)
+					{
+						console.log('P');
+					}
+					// TODO: Remove this when collisons are developped
+					createApple = true;
+				}
 			}
 
 			function render()
@@ -264,6 +311,7 @@
 				if( elapsedTime > tickDelta)
 				{
 					moveSnakeForward();
+					addApple();
 					elapsedTime = 0.0;
 				}
 				renderer.render( scene, camera );
