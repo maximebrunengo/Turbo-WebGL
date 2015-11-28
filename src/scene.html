@@ -23,9 +23,6 @@
 			// This variable is used to simulate an apple eaten with the space bar
 			var appleEaten = false;
 
-			// TODO: Delete when collisions are developped
-			// This variable is used to simulate an apple created
-			var createApple = false;
 
 			// Debug or not
 			var debug = false;
@@ -166,21 +163,20 @@
 				// Create an apple
 				// Create the snake
 				console.log('Apple created');
-				if(checkGenerationApple() == true)
-				{
-					var geometry = new THREE.SphereGeometry( 0.5, 32, 32 );
-					var material = new THREE.MeshBasicMaterial( {color: 0xff0000} );
-					var sphere = new THREE.Mesh( geometry, material );
 
-					var mx=Math.random()*50;
-					var my=Math.random()*50;
-					sphere.position.x = mx-25;
-					sphere.position.y = my-25;
-					sphere.position.z = 0;
+				var geometry = new THREE.SphereGeometry( 0.5, 32, 32 );
+				var material = new THREE.MeshBasicMaterial( {color: 0xff0000} );
+				var sphere = new THREE.Mesh( geometry, material );
 
-					scene.add( sphere );
-					createApple = false;
-				}
+				var mx=Math.random()*50;
+				var my=Math.random()*50;
+				sphere.position.x = mx-25;
+				sphere.position.y = my-25;
+				sphere.position.z = 0;
+
+				scene.add( sphere );
+
+
 			}
 
 			function addLights()
@@ -300,7 +296,7 @@
 						console.log('P');
 					}
 					// TODO: Remove this when collisons are developped
-					createApple = true;
+					addApple();
 				}
 			}
 
@@ -311,7 +307,6 @@
 				if( elapsedTime > tickDelta)
 				{
 					moveSnakeForward();
-					addApple();
 					elapsedTime = 0.0;
 				}
 				renderer.render( scene, camera );
