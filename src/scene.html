@@ -20,9 +20,11 @@
 			var clock = new THREE.Clock(true);
 			var elapsedTime = 0;
 			var tickDelta = 0.25; // 250ms
-			var numberOfTrees = 50;
-			var squareSize = 50;
+			var squareSize = 30;
+			var treeDensity = 0.02;
+			var numberOfTrees = squareSize*squareSize*treeDensity;
 			var gameLost = false;
+			var appleMeshArray = [];
 
 			// TODO: Remove when apples are added to the scene
 			// This variable is used to simulate an apple eaten with the space bar
@@ -99,13 +101,16 @@
 					sphere.position.z = zTree + 2;
 					scene.add( sphere );
 				}
+
+				// First apple
+				addApple();
 			}
 
 			function initializeSnake()
 			{
 				// Create the snake
 				var cubeGeometry = new THREE.BoxGeometry( 1, 1, 1 );
-				var cubeMaterial = new THREE.MeshPhongMaterial( { color: 0xff0000 } );
+				var cubeMaterial = new THREE.MeshPhongMaterial( { color: 0xffff00 } );
 
 				var initialSnakeLength = 3;
 				for (var i = 0; i < initialSnakeLength; i++)
@@ -117,48 +122,57 @@
 				}
 			}
 
-			function checkTreeCollision()
+			function checkTreeCollision(objectPosition)
 			{
 				for(var i=0 ; i < treePositions.length ; i++)
 				{
-					if(snakeCubeArray[0].position.x == treePositions[i].x
-					   && snakeCubeArray[0].position.y == treePositions[i].y)
+					if(objectPosition.x == treePositions[i].x
+					   && objectPosition.y == treePositions[i].y)
 					{
-						console.log("Collision with a tree\n");
 						return true;
 					}
 				}
 				return false;
 			}
 
-			function checkWallCollision()
+			function checkWallCollision(objectPosition)
 			{
-				if(snakeCubeArray[0].position.x >= squareSize/2
-				   || snakeCubeArray[0].position.x <= -squareSize/2
-				   || snakeCubeArray[0].position.y >= squareSize/2
-				   || snakeCubeArray[0].position.y <= -squareSize/2 )
+				if(objectPosition.x >= squareSize/2
+				   || objectPosition.x <= -squareSize/2
+				   || objectPosition.y >= squareSize/2
+				   || objectPosition.y <= -squareSize/2 )
 				{
 					return true;
 				}
 				return false;
 			}
 
-			function checkItemEaten()
+			function checkItemEaten(objectPosition)
 			{
-				if(appleEaten == true)
+				for(var i=0 ; i < appleMeshArray.length ; i++)
 				{
-					// TODO: Replace with checking if the head
-					// is on an apple or not
-					appleEaten = false;
-					return true;
+					if(objectPosition.x == appleMeshArray[i].position.x
+					   && objectPosition.y == appleMeshArray[i].position.y)
+					{
+						// Remove the eaten apple from the scene
+						scene.remove(appleMeshArray[i]);
+						// Remove the eaten apple from the array
+						appleMeshArray.splice(i,1);
+						// Add a new apple
+						addApple();
+						// Increase speed
+						tickDelta *= 0.95;
+						return true;
+					}
 				}
+				return false;
 			}
 
 			function moveSnakeForward()
 			{
 				// Check if the snake is eating something
 				// Increment snake length
-				if(checkItemEaten() == true)
+				if(checkItemEaten(snakeCubeArray[0].position) == true)
 				{
 // 					var cube = new THREE.Mesh( cubeGeometry, cubeMaterial );
 					var cube = new THREE.Mesh( snakeCubeArray[0].geometry, snakeCubeArray[0].material );
@@ -182,11 +196,15 @@
 				var geometry = new THREE.SphereGeometry( 0.5, 32, 32 );
 				var material = new THREE.MeshBasicMaterial( {color: 0xff0000} );
 				var sphere = new THREE.Mesh( geometry, material );
+				do
+				{
+					sphere.position.x = Math.round(Math.random()*squareSize)-squareSize/2;
+					sphere.position.y = Math.round(Math.random()*squareSize)-squareSize/2;
+					sphere.position.z = 0.5;
+				}
+				while(checkTreeCollision(sphere.position));
 
-				sphere.position.x = Math.random()*50 - 25;
-				sphere.position.y = Math.random()*50 - 25;
-				sphere.position.z = 0;
-
+				appleMeshArray.push(sphere);
 				scene.add( sphere );
 			}
 
@@ -340,7 +358,8 @@
 				if( elapsedTime > tickDelta)
 				{
 					moveSnakeForward();
-					gameLost = checkTreeCollision() || checkWallCollision();
+					gameLost = checkTreeCollision(snakeCubeArray[0].position)
+						   || checkWallCollision(snakeCubeArray[0].position);
 
 					elapsedTime = 0.0;
 				}
