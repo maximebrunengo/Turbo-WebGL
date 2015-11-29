@@ -20,8 +20,9 @@
 			var clock = new THREE.Clock(true);
 			var elapsedTime = 0;
 			var tickDelta = 0.25; // 250ms
-			var numberOfTrees = 50;
-			var squareSize = 50;
+			var squareSize = 30;
+			var treeDensity = 0.02;
+			var numberOfTrees = squareSize*squareSize*treeDensity;
 			var gameLost = false;
 			var appleMeshArray = [];
 
