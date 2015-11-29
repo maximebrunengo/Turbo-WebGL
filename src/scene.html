@@ -23,6 +23,7 @@
 			var numberOfTrees = 50;
 			var squareSize = 50;
 			var gameLost = false;
+			var appleMeshArray = [];
 
 			// TODO: Remove when apples are added to the scene
 			// This variable is used to simulate an apple eaten with the space bar
@@ -182,11 +183,15 @@
 				var geometry = new THREE.SphereGeometry( 0.5, 32, 32 );
 				var material = new THREE.MeshBasicMaterial( {color: 0xff0000} );
 				var sphere = new THREE.Mesh( geometry, material );
+				do
+				{
+					sphere.position.x = Math.round(Math.random()*squareSize)-squareSize/2;
+					sphere.position.y = Math.round(Math.random()*squareSize)-squareSize/2;
+					sphere.position.z = 0.5;
+				}
+				while(checkTreeCollision(sphere.position));
 
-				sphere.position.x = Math.random()*50 - 25;
-				sphere.position.y = Math.random()*50 - 25;
-				sphere.position.z = 0;
-
+				appleMeshArray.push(sphere);
 				scene.add( sphere );
 			}
 
