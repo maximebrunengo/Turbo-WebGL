@@ -15,10 +15,15 @@
 		<script>
 			// Global variables
 			var snakeCubeArray = [];
+			var treePositions = [];
 			var snakeForwardDirection = new THREE.Vector3(1,0,0);
 			var clock = new THREE.Clock(true);
 			var elapsedTime = 0;
 			var tickDelta = 0.25 // 250ms
+			var numberOfTrees = 50;
+			var squareSize = 50;
+			var gameLost = false;
+
 			// TODO: Remove when apples are added to the scene
 			// This variable is used to simulate an apple eaten with the space bar
 			var appleEaten = false;
@@ -61,7 +66,7 @@
 			function addSceneElements()
 			{
 				// Create the ground
-				var groundGeometry = new THREE.BoxGeometry( 50, 50, 0.2 );
+				var groundGeometry = new THREE.BoxGeometry( squareSize, squareSize, 0.2 );
 				var groundMaterial = new THREE.MeshBasicMaterial( { color: 0x5FB404 } );
 				var ground = new THREE.Mesh( groundGeometry, groundMaterial );
 				ground.receiveShadow = true;
@@ -74,26 +79,25 @@
 
 				var geometrySphere = new THREE.SphereGeometry(1);
 				var materialSphere = new THREE.MeshBasicMaterial( {color: 0x009900} );
-				var Z = 10;
-				var mx=5;
-				var my=5;
-				for (var i=0;i<20;i++)
+				var zTree = 1;
+				for (var i=0;i<numberOfTrees;i++)
 				{
-					var mx=Math.random()*50;
-					var my=Math.random()*50;
+					var mx = Math.round(Math.random()*squareSize)-squareSize/2;
+					var my = Math.round(Math.random()*squareSize)-squareSize/2;
+					treePositions.push(new THREE.Vector2(mx, my));
+
 					var trunk = new THREE.Mesh( geometryTrunk, materialTrunk );
-					trunk.position.x=mx-25;
-					trunk.position.y=my-25;
+					trunk.position.x=mx;
+					trunk.position.y=my;
+					trunk.position.z=zTree;
 					trunk.rotation.x = Math.PI / 2;
 					scene.add( trunk );
 
 					var sphere = new THREE.Mesh( geometrySphere, materialSphere );
-					sphere.position.x=mx-25;
-					sphere.position.y=my-25;
-					sphere.position.setZ(2);
+					sphere.position.x=mx;
+					sphere.position.y=my;
+					sphere.position.z = zTree + 2;
 					scene.add( sphere );
-					//mx=mx-5;
-					//my=my-5;
 				}
 			}
 
@@ -111,6 +115,32 @@
 					snakeCubeArray.push(cube);
 					scene.add(snakeCubeArray[i]);
 				}
+			}
+
+			function checkTreeCollision()
+			{
+				for(var i=0 ; i < treePositions.length ; i++)
+				{
+					if(snakeCubeArray[0].position.x == treePositions[i].x
+					   && snakeCubeArray[0].position.y == treePositions[i].y)
+					{
+						console.log("Collision with a tree\n");
+						return true;
+					}
+				}
+				return false;
+			}
+
+			function checkWallCollision()
+			{
+				if(snakeCubeArray[0].position.x >= squareSize/2
+				   || snakeCubeArray[0].position.x <= -squareSize/2
+				   || snakeCubeArray[0].position.y >= squareSize/2
+				   || snakeCubeArray[0].position.y <= -squareSize/2 )
+				{
+					return true;
+				}
+				return false;
 			}
 
 			function checkItemEaten()
@@ -216,7 +246,10 @@
 					{
 						console.log('left arrow');
 					}
-					snakeForwardDirection.set(-1,0,0);
+					if(snakeForwardDirection.x != 1)
+					{
+						snakeForwardDirection.set(-1,0,0);
+					}
 				}
 				else if (e.keyCode == '38')
 				{
@@ -225,7 +258,10 @@
 					{
 						console.log('up arrow');
 					}
-					snakeForwardDirection.set(0,1,0);
+					if(snakeForwardDirection.y != -1)
+					{
+						snakeForwardDirection.set(0,1,0);
+					}
 				}
 				else if (e.keyCode == '39')
 				{
@@ -234,7 +270,10 @@
 					{
 						console.log('right arrow');
 					}
-					snakeForwardDirection.set(1,0,0);
+					if(snakeForwardDirection.x != -1)
+					{
+						snakeForwardDirection.set(1,0,0);
+					}
 				}
 				else if (e.keyCode == '40')
 				{
@@ -243,7 +282,10 @@
 					{
 						console.log('down arrow');
 					}
-					snakeForwardDirection.set(0,-1,0);
+					if(snakeForwardDirection.y != 1)
+					{
+						snakeForwardDirection.set(0,-1,0);
+					}
 				}
 				else if (e.keyCode == '32')
 				{
@@ -260,10 +302,22 @@
 			function render()
 			{
 				requestAnimationFrame( render );
-				elapsedTime += clock.getDelta();
+				console.log(gameLost);
+				if( gameLost == false)
+				{
+					elapsedTime += clock.getDelta();
+				}
+				else
+				{
+					// TODO : Display the losing screen
+					console.log("You lost");
+				}
+
 				if( elapsedTime > tickDelta)
 				{
 					moveSnakeForward();
+					gameLost = checkTreeCollision() || checkWallCollision();
+
 					elapsedTime = 0.0;
 				}
 				renderer.render( scene, camera );
