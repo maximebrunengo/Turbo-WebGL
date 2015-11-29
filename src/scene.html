@@ -131,6 +131,18 @@
 				return false;
 			}
 
+			function checkWallCollision()
+			{
+				if(snakeCubeArray[0].position.x >= squareSize/2
+				   || snakeCubeArray[0].position.x <= -squareSize/2
+				   || snakeCubeArray[0].position.y >= squareSize/2
+				   || snakeCubeArray[0].position.y <= -squareSize/2 )
+				{
+					return true;
+				}
+				return false;
+			}
+
 			function checkItemEaten()
 			{
 				if(appleEaten == true)
@@ -304,12 +316,8 @@
 				if( elapsedTime > tickDelta)
 				{
 					moveSnakeForward();
+					gameLost = checkTreeCollision() || checkWallCollision();
 
-					if(checkTreeCollision() == true)
-					{
-						console.log("Game lost !");
-						gameLost = true;
-					}
 					elapsedTime = 0.0;
 				}
 				renderer.render( scene, camera );
