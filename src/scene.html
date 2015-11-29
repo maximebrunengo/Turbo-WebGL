@@ -110,7 +110,7 @@
 			{
 				// Create the snake
 				var cubeGeometry = new THREE.BoxGeometry( 1, 1, 1 );
-				var cubeMaterial = new THREE.MeshPhongMaterial( { color: 0xff0000 } );
+				var cubeMaterial = new THREE.MeshPhongMaterial( { color: 0xffff00 } );
 
 				var initialSnakeLength = 3;
 				for (var i = 0; i < initialSnakeLength; i++)
@@ -160,6 +160,8 @@
 						appleMeshArray.splice(i,1);
 						// Add a new apple
 						addApple();
+						// Increase speed
+						tickDelta *= 0.95;
 						return true;
 					}
 				}
