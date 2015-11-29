@@ -118,26 +118,25 @@
 				}
 			}
 
-			function checkTreeCollision()
+			function checkTreeCollision(objectPosition)
 			{
 				for(var i=0 ; i < treePositions.length ; i++)
 				{
-					if(snakeCubeArray[0].position.x == treePositions[i].x
-					   && snakeCubeArray[0].position.y == treePositions[i].y)
+					if(objectPosition.x == treePositions[i].x
+					   && objectPosition.y == treePositions[i].y)
 					{
-						console.log("Collision with a tree\n");
 						return true;
 					}
 				}
 				return false;
 			}
 
-			function checkWallCollision()
+			function checkWallCollision(objectPosition)
 			{
-				if(snakeCubeArray[0].position.x >= squareSize/2
-				   || snakeCubeArray[0].position.x <= -squareSize/2
-				   || snakeCubeArray[0].position.y >= squareSize/2
-				   || snakeCubeArray[0].position.y <= -squareSize/2 )
+				if(objectPosition.x >= squareSize/2
+				   || objectPosition.x <= -squareSize/2
+				   || objectPosition.y >= squareSize/2
+				   || objectPosition.y <= -squareSize/2 )
 				{
 					return true;
 				}
@@ -345,7 +344,8 @@
 				if( elapsedTime > tickDelta)
 				{
 					moveSnakeForward();
-					gameLost = checkTreeCollision() || checkWallCollision();
+					gameLost = checkTreeCollision(snakeCubeArray[0].position)
+						   || checkWallCollision(snakeCubeArray[0].position);
 
 					elapsedTime = 0.0;
 				}
