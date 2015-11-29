@@ -100,6 +100,9 @@
 					sphere.position.z = zTree + 2;
 					scene.add( sphere );
 				}
+
+				// First apple
+				addApple();
 			}
 
 			function initializeSnake()
@@ -143,22 +146,30 @@
 				return false;
 			}
 
-			function checkItemEaten()
+			function checkItemEaten(objectPosition)
 			{
-				if(appleEaten == true)
+				for(var i=0 ; i < appleMeshArray.length ; i++)
 				{
-					// TODO: Replace with checking if the head
-					// is on an apple or not
-					appleEaten = false;
-					return true;
+					if(objectPosition.x == appleMeshArray[i].position.x
+					   && objectPosition.y == appleMeshArray[i].position.y)
+					{
+						// Remove the eaten apple from the scene
+						scene.remove(appleMeshArray[i]);
+						// Remove the eaten apple from the array
+						appleMeshArray.splice(i,1);
+						// Add a new apple
+						addApple();
+						return true;
+					}
 				}
+				return false;
 			}
 
 			function moveSnakeForward()
 			{
 				// Check if the snake is eating something
 				// Increment snake length
-				if(checkItemEaten() == true)
+				if(checkItemEaten(snakeCubeArray[0].position) == true)
 				{
 // 					var cube = new THREE.Mesh( cubeGeometry, cubeMaterial );
 					var cube = new THREE.Mesh( snakeCubeArray[0].geometry, snakeCubeArray[0].material );
