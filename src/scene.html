@@ -19,7 +19,7 @@
 			var snakeForwardDirection = new THREE.Vector3(1,0,0);
 			var clock = new THREE.Clock(true);
 			var elapsedTime = 0;
-			var tickDelta = 0.25 // 250ms
+			var tickDelta = 0.25; // 250ms
 			var numberOfTrees = 50;
 			var squareSize = 50;
 			var gameLost = false;
@@ -176,6 +176,20 @@
 
 			}
 
+			function addApple()
+			{
+				// Create an apple
+				var geometry = new THREE.SphereGeometry( 0.5, 32, 32 );
+				var material = new THREE.MeshBasicMaterial( {color: 0xff0000} );
+				var sphere = new THREE.Mesh( geometry, material );
+
+				sphere.position.x = Math.random()*50 - 25;
+				sphere.position.y = Math.random()*50 - 25;
+				sphere.position.z = 0;
+
+				scene.add( sphere );
+			}
+
 			function addLights()
 			{
 				if(debug == true)
@@ -296,6 +310,16 @@
 					}
 					// TODO: Remove this when apples are added on the scene
 					appleEaten = true;
+				}
+				else if (e.keyCode == '80')
+				{
+					// P
+					if(debug == true)
+					{
+						console.log('P');
+					}
+					// TODO: Remove this when collisons are developped
+					addApple();
 				}
 			}
 
