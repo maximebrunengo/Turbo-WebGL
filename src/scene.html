@@ -20,10 +20,12 @@
 			var clock = new THREE.Clock(true);
 			var elapsedTime = 0;
 			var tickDelta = 0.25; // 250ms
-			var squareSize = 30;
+			var squareSize = 25; // must be odd
 			var treeDensity = 0.02;
 			var numberOfTrees = squareSize*squareSize*treeDensity;
 			var gameLost = false;
+			var displayAxes = false;
+			var displayGrid = true;
 			var appleMeshArray = [];
 
 			// view = 0 for initial view, 1 for view from top and 2 for third person
@@ -71,11 +73,42 @@
 			function addSceneElements()
 			{
 				// Create the ground
-				var groundGeometry = new THREE.BoxGeometry( squareSize, squareSize, 0.2 );
+				var groundGeometry = new THREE.BoxGeometry( squareSize, squareSize, 0 );
 				var groundMaterial = new THREE.MeshBasicMaterial( { color: 0x5FB404 } );
 				var ground = new THREE.Mesh( groundGeometry, groundMaterial );
 				ground.receiveShadow = true;
 				scene.add( ground );
+
+				// Display the axes
+				if(displayAxes)
+				{
+					var gridAxes = new THREE.Geometry();
+					gridAxes.vertices.push(new THREE.Vector3(1, 0, 0.1));
+					gridAxes.vertices.push(new THREE.Vector3(0, 0, 0.1));
+					gridAxes.vertices.push(new THREE.Vector3(0, 1, 0.1));
+					var axe = new THREE.Line(gridAxes, new THREE.LineBasicMaterial( { color: 0x0F0004 } ));
+					scene.add(axe);
+				}
+
+				// Draw grid on the ground
+				if(displayGrid)
+				{
+					var gridMaterial = new THREE.LineBasicMaterial( { color: 0x5FE404 } );
+					var zLine = 0.05;
+					for(var j = -squareSize/2 ; j < squareSize/2 ; j++)
+					{
+						var gridGeometryY = new THREE.Geometry();
+						gridGeometryY.vertices.push(new THREE.Vector3(j, squareSize/2, zLine));
+						gridGeometryY.vertices.push(new THREE.Vector3(j, -squareSize/2, zLine));
+						var gridGeometryX = new THREE.Geometry();
+						gridGeometryX.vertices.push(new THREE.Vector3(-squareSize/2, j, zLine));
+						gridGeometryX.vertices.push(new THREE.Vector3(squareSize/2, j, zLine));
+						var lineX = new THREE.Line(gridGeometryY, gridMaterial);
+						var lineY = new THREE.Line(gridGeometryX, gridMaterial);
+						scene.add(lineX);
+						scene.add(lineY);
+					}
+				}
 
 				//Add trees
 				//(radiusTop, radiusBottom, height)
@@ -87,8 +120,8 @@
 				var zTree = 1;
 				for (var i=0;i<numberOfTrees;i++)
 				{
-					var mx = Math.round(Math.random()*squareSize)-squareSize/2;
-					var my = Math.round(Math.random()*squareSize)-squareSize/2;
+					var mx = Math.round((Math.random()-0.5)*(squareSize-1));
+					var my = Math.round((Math.random()-0.5)*(squareSize-1));
 					treePositions.push(new THREE.Vector2(mx, my));
 
 					var trunk = new THREE.Mesh( geometryTrunk, materialTrunk );
@@ -201,8 +234,8 @@
 				var sphere = new THREE.Mesh( geometry, material );
 				do
 				{
-					sphere.position.x = Math.round(Math.random()*squareSize)-squareSize/2;
-					sphere.position.y = Math.round(Math.random()*squareSize)-squareSize/2;
+					sphere.position.x = Math.round((Math.random()-0.5)*(squareSize-1));
+					sphere.position.y = Math.round((Math.random()-0.5)*(squareSize-1));
 					sphere.position.z = 0.5;
 				}
 				while(checkTreeCollision(sphere.position));
