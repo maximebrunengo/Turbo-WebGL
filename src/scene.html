@@ -136,6 +136,19 @@
 				return false;
 			}
 
+			function checkSnakeCollision(objectPosition)
+			{
+				for(var i=1 ; i < snakeCubeArray.length ; i++)
+				{
+					if(objectPosition.x == snakeCubeArray[i].position.x
+					   && objectPosition.y == snakeCubeArray[i].position.y)
+					{
+						return true;
+					}
+				}
+				return false;
+			}
+
 			function checkWallCollision(objectPosition)
 			{
 				if(objectPosition.x >= squareSize/2
@@ -307,6 +320,7 @@
 					{
 						snakeForwardDirection.set(1,0,0);
 					}
+
 				}
 				else if (e.keyCode == '40')
 				{
@@ -360,7 +374,8 @@
 				{
 					moveSnakeForward();
 					gameLost = checkTreeCollision(snakeCubeArray[0].position)
-						   || checkWallCollision(snakeCubeArray[0].position);
+						   || checkWallCollision(snakeCubeArray[0].position)
+						   || checkSnakeCollision(snakeCubeArray[0].position);
 
 					elapsedTime = 0.0;
 				}
