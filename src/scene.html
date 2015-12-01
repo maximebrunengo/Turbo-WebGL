@@ -54,7 +54,8 @@
 
 			// Create the WebGL renderer
 			var renderer = new THREE.WebGLRenderer();
-			renderer.setSize( window.innerWidth, window.innerHeight );
+			var scaleFactor = 0.99
+			renderer.setSize( window.innerWidth*scaleFactor, window.innerHeight*scaleFactor );
 			renderer.shadowMapEnabled = true;
 
 			// Append the renderer to the body
