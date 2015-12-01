@@ -187,9 +187,20 @@
 					// Put the last piece in the front
 					snakeCubeArray.splice(0, 0, snakeCubeArray.pop());
 				}
-					// Move head in the forward forwardDirection
-					snakeCubeArray[0].position.copy(snakeCubeArray[1].position);
-					snakeCubeArray[0].position.add(snakeForwardDirection);
+				// Move head in the forward forwardDirection
+				snakeCubeArray[0].position.copy(snakeCubeArray[1].position);
+				snakeCubeArray[0].position.add(snakeForwardDirection);
+
+				//Change
+				if(view==2)
+				{
+					camera.position.set(snakeCubeArray[2].position.x, snakeCubeArray[2].position.y, 10);
+					var test = new THREE.Vector3(0,0,0);
+					test.x = snakeCubeArray[0].position.x + 5*snakeForwardDirection.x;
+					test.y = snakeCubeArray[0].position.y + 5*snakeForwardDirection.y;
+					test.z = snakeCubeArray[0].position.z + 5*snakeForwardDirection.z;
+					camera.lookAt(test);
+				}
 
 			}
 
@@ -239,17 +250,16 @@
 				{
 					camera.position.set(0, -30, 30);
 					camera.lookAt(scene.position);
-					scene.add(camera); 
 				}
 				else if(view==1)
 				{
 					camera.position.set(0, 0, 30);
 					camera.lookAt(scene.position);
-					scene.add(camera); 
 				}
 				else
 				{
-
+					camera.position.set(snakeCubeArray[0].position.x, snakeCubeArray[0].position.y, 5);
+					camera.lookAt(snakeCubeArray[0].position+20*snakeForwardDirection);
 				}
 			}
 
