@@ -18,7 +18,9 @@
 			var treePositions = [];
 			var snakeForwardDirection = new THREE.Vector3(1,0,0);
 			var clock = new THREE.Clock(true);
+			var clock_keyboard = new THREE.Clock(true);
 			var elapsedTime = 0;
+			var testTime = 0;
 			var tickDelta = 0.25; // 250ms
 			var squareSize = 25; // must be odd
 			var treeDensity = 0.02;
@@ -171,6 +173,19 @@
 				return false;
 			}
 
+			function checkSnakeCollision(objectPosition)
+			{
+				for(var i=1 ; i < snakeCubeArray.length ; i++)
+				{
+					if(objectPosition.x == snakeCubeArray[i].position.x
+					   && objectPosition.y == snakeCubeArray[i].position.y)
+					{
+						return true;
+					}
+				}
+				return false;
+			}
+
 			function checkWallCollision(objectPosition)
 			{
 				if(objectPosition.x >= squareSize/2
@@ -288,114 +303,122 @@
 
 			function checkKey(e) 
 			{
-				e = e || window.event;
-				var distance = 1;
+				testTime += clock_keyboard.getDelta();
+				if(testTime>tickDelta)
+				{
+					console.log(testTime);
+					e = e || window.event;
+					var distance = 1;
 
-				if (e.keyCode == '90')
-				{
-					// z
-					if(debug == true)
+					if (e.keyCode == '90')
 					{
-						console.log('z');
+						// z
+						if(debug == true)
+						{
+							console.log('z');
+						}
+						camera.translateY(-distance);
 					}
-					camera.translateY(-distance);
+					else if (e.keyCode == '83')
+					{
+						// s
+						if(debug == true)
+						{
+							console.log('s');
+						}
+						camera.translateY(distance);
+					}
+					else if (e.keyCode == '81')
+					{
+						// q
+						if(debug == true)
+						{
+							console.log('q');
+						}
+					      camera.translateX(distance);
+					}
+					else if (e.keyCode == '68')
+					{
+						// d
+						if(debug == true)
+						{
+							console.log('d');
+						}
+						camera.translateX(-distance);
+					}
+					else if (e.keyCode == '37')
+					{
+						// LEFT ARROW
+						if(debug == true)
+						{
+							console.log('left arrow');
+						}
+						if(snakeForwardDirection.x != 1)
+						{
+							snakeForwardDirection.set(-1,0,0);
+						}
+					}
+					else if (e.keyCode == '38')
+					{
+						// UP ARROW
+						if(debug == true)
+						{
+							console.log('up arrow');
+						}
+						if(snakeForwardDirection.y != -1)
+						{
+							snakeForwardDirection.set(0,1,0);
+						}
+					}
+					else if (e.keyCode == '39')
+					{
+						// RIGHT ARROW
+						if(debug == true)
+						{
+							console.log('right arrow');
+						}
+						if(snakeForwardDirection.x != -1)
+						{
+							snakeForwardDirection.set(1,0,0);
+						}
+
+					}
+					else if (e.keyCode == '40')
+					{
+						// DOWN ARROW
+						if(debug == true)
+						{
+							console.log('down arrow');
+						}
+						if(snakeForwardDirection.y != 1)
+						{
+							snakeForwardDirection.set(0,-1,0);
+						}
+					}
+					else if (e.keyCode == '32')
+					{
+						// SPACE BAR
+						if(debug == true)
+						{
+							console.log('space bar');
+						}
+						// TODO: Remove this when apples are added on the scene
+						appleEaten = true;
+					}
+					else if (e.keyCode == '80')
+					{
+						// P
+						if(debug == true)
+						{
+							console.log('P');
+						}
+						// Change view
+						view = (view+1)%3;
+						changeView(view);
+					}
+					testTime=0;
 				}
-				else if (e.keyCode == '83')
-				{
-					// s
-					if(debug == true)
-					{
-						console.log('s');
-					}
-					camera.translateY(distance);
-				}
-				else if (e.keyCode == '81')
-				{
-					// q
-					if(debug == true)
-					{
-						console.log('q');
-					}
-				      camera.translateX(distance);
-				}
-				else if (e.keyCode == '68')
-				{
-					// d
-					if(debug == true)
-					{
-						console.log('d');
-					}
-					camera.translateX(-distance);
-				}
-				else if (e.keyCode == '37')
-				{
-					// LEFT ARROW
-					if(debug == true)
-					{
-						console.log('left arrow');
-					}
-					if(snakeForwardDirection.x != 1)
-					{
-						snakeForwardDirection.set(-1,0,0);
-					}
-				}
-				else if (e.keyCode == '38')
-				{
-					// UP ARROW
-					if(debug == true)
-					{
-						console.log('up arrow');
-					}
-					if(snakeForwardDirection.y != -1)
-					{
-						snakeForwardDirection.set(0,1,0);
-					}
-				}
-				else if (e.keyCode == '39')
-				{
-					// RIGHT ARROW
-					if(debug == true)
-					{
-						console.log('right arrow');
-					}
-					if(snakeForwardDirection.x != -1)
-					{
-						snakeForwardDirection.set(1,0,0);
-					}
-				}
-				else if (e.keyCode == '40')
-				{
-					// DOWN ARROW
-					if(debug == true)
-					{
-						console.log('down arrow');
-					}
-					if(snakeForwardDirection.y != 1)
-					{
-						snakeForwardDirection.set(0,-1,0);
-					}
-				}
-				else if (e.keyCode == '32')
-				{
-					// SPACE BAR
-					if(debug == true)
-					{
-						console.log('space bar');
-					}
-					// TODO: Remove this when apples are added on the scene
-					appleEaten = true;
-				}
-				else if (e.keyCode == '80')
-				{
-					// P
-					if(debug == true)
-					{
-						console.log('P');
-					}
-					// Change view
-					view = (view+1)%3;
-					changeView(view);
-				}
+				
 			}
 
 			function render()
@@ -416,7 +439,8 @@
 				{
 					moveSnakeForward();
 					gameLost = checkTreeCollision(snakeCubeArray[0].position)
-						   || checkWallCollision(snakeCubeArray[0].position);
+						   || checkWallCollision(snakeCubeArray[0].position)
+						   || checkSnakeCollision(snakeCubeArray[0].position);
 
 					elapsedTime = 0.0;
 				}
