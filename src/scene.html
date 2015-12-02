@@ -1,14 +1,34 @@
 <!DOCTYPE html>
 <html>
 	<head>
+
 		<meta charset=utf-8>
 		<title>My first Three.js app</title>
+		<link rel="stylesheet" type="text/css" href="scene.css">
 		<style>
 			body { margin: 0; }
 			canvas { width: 100%; height: 100% }
 		</style>
 	</head>
 	<body>
+		<div id="gameOver" style="display:none">
+        <div id="gameOverText">GAME OVER</div>
+				<div id="gameoverSubtitleText">press spacebar to restart</div>
+    </div>
+		<div id="scoreEnd" style="display:none;">
+			<div id="scoreEndText">you ate <span id="finalscore"></span> apples you sneaky !</div>
+		</div>
+		<div id="start" style="display:none">
+        <div id="startText">3D SNAKE</div>
+				<div id="startSubtitleText">press enter to start</div>
+    </div>
+		<div id="scoreDisplay" style="display:block;">
+			<div id="scoreText">apples eaten : <span id="score"></span></div>
+		</div>
+		<div id="pause" style="display:none">
+        <div id="pauseText">PAUSE</div>
+    </div>
+
 		<script src="js/three.min.js"></script>
 		<script src="js/lights/DirectionalLight.js"></script>
 
@@ -24,7 +44,17 @@
 			var treeDensity = 0.02;
 			var numberOfTrees = squareSize*squareSize*treeDensity;
 			var gameLost = false;
+			var ready = false;
 			var appleMeshArray = [];
+			var gameover = document.getElementById("gameOver");
+			var start = document.getElementById("start");
+			var scoredisplay = document.getElementById("scoreDisplay");
+			var scoreend = document.getElementById("scoreEnd");
+			var pause = document.getElementById("pause");
+			var ispause = false;
+			var score = 0;
+			var finalscore = 0;
+
 
 			// TODO: Remove when apples are added to the scene
 			// This variable is used to simulate an apple eaten with the space bar
@@ -40,7 +70,8 @@
 			var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
 			camera.position.set(0, -30, 30);
 			camera.lookAt(scene.position);
-			scene.add(camera); 
+			scene.add(camera);
+
 
 
 			// Add scene elements
@@ -62,6 +93,9 @@
 
 			document.onkeydown = checkKey;
 
+			//Init score
+			document.getElementById("score").innerHTML = score;
+
 			render();
 
 			// Main functions
@@ -69,7 +103,7 @@
 			{
 				// Create the ground
 				var groundGeometry = new THREE.BoxGeometry( squareSize, squareSize, 0.2 );
-				var groundMaterial = new THREE.MeshBasicMaterial( { color: 0x5FB404 } );
+				var groundMaterial = new THREE.MeshBasicMaterial( { color: 0xccff99 } );
 				var ground = new THREE.Mesh( groundGeometry, groundMaterial );
 				ground.receiveShadow = true;
 				scene.add( ground );
@@ -162,6 +196,9 @@
 						addApple();
 						// Increase speed
 						tickDelta *= 0.95;
+						score++;
+						finalscore++;
+						document.getElementById("score").innerHTML = score;
 						return true;
 					}
 				}
@@ -214,15 +251,15 @@
 				{
 					console.log('test');
 				}
-				// Ambient light has no direction, it illuminates every object with the same 
-				// intensity. If only ambient light is used, no shading effects will occur. 
-				var ambientLight = new THREE.AmbientLight(0x101010, 1.0); 
-				scene.add(ambientLight);   
+				// Ambient light has no direction, it illuminates every object with the same
+				// intensity. If only ambient light is used, no shading effects will occur.
+				var ambientLight = new THREE.AmbientLight(0x101010, 1.0);
+				scene.add(ambientLight);
 
-				// Directional light has a source and shines in all directions, like the sun. 
-				// This behaviour creates shading effects. 
-				directionalLight = new THREE.DirectionalLight(0xffffff, 1.0); 
-				directionalLight.position.set(5.0, 5.0, 10.0); 
+				// Directional light has a source and shines in all directions, like the sun.
+				// This behaviour creates shading effects.
+				directionalLight = new THREE.DirectionalLight(0xffffff, 1.0);
+				directionalLight.position.set(5.0, 5.0, 10.0);
 				directionalLight.castShadow = true;
 				directionalLight.shadowCameraNear = true;
 				directionalLight.shadowCameraVisible = true;
@@ -230,7 +267,7 @@
 				scene.add(directionalLight);
 			}
 
-			function checkKey(e) 
+			function checkKey(e)
 			{
 				e = e || window.event;
 				var distance = 1;
@@ -327,7 +364,30 @@
 						console.log('space bar');
 					}
 					// TODO: Remove this when apples are added on the scene
-					appleEaten = true;
+					//appleEaten = true;
+
+						if(gameLost==true)
+						{
+							location.reload();
+						}
+						else if(gameLost==false)
+						{
+							if(ispause==false)
+							{
+								ready=false;
+								ispause=true;
+								pause.style.display="block";
+							}
+							else
+							{
+								ready=true;
+								ispause=false;
+								pause.style.display="none";
+							}
+
+						}
+						//gameLost=false;
+
 				}
 				else if (e.keyCode == '80')
 				{
@@ -339,32 +399,64 @@
 					// TODO: Remove this when collisons are developped
 					addApple();
 				}
+				else if (e.keyCode == '13')
+				{
+					// enter
+					if(debug == true)
+					{
+						console.log('enter');
+					}
+					// TODO: Remove this when collisons are developped
+					ready=true;
+				}
 			}
 
 			function render()
 			{
 				requestAnimationFrame( render );
 				console.log(gameLost);
-				if( gameLost == false)
+				if(ready==true)
 				{
-					elapsedTime += clock.getDelta();
+					start.style.display="none";
+					if( gameLost == false)
+					{
+						elapsedTime += clock.getDelta();
+					}
+					else
+					{
+					// TODO : Display the losing screen
+					console.log("You lost");
+					gameOver.style.display="block";
+					scoredisplay.style.display="none";
+					scoreend.style.display="block";
+					document.getElementById("finalscore").innerHTML = finalscore;
+					}
+
+					if( elapsedTime > tickDelta)
+					{
+							moveSnakeForward();
+							gameLost = checkTreeCollision(snakeCubeArray[0].position)
+						   	|| checkWallCollision(snakeCubeArray[0].position);
+
+								elapsedTime = 0.0;
+					}
 				}
 				else
 				{
-					// TODO : Display the losing screen
-					console.log("You lost");
-				}
-
-				if( elapsedTime > tickDelta)
-				{
-					moveSnakeForward();
-					gameLost = checkTreeCollision(snakeCubeArray[0].position)
-						   || checkWallCollision(snakeCubeArray[0].position);
-
-					elapsedTime = 0.0;
+					gameOver.style.display="none";
+					elapsedTime=0.0;
+					if(ispause==false)
+					{
+						start.style.display="block";
+					}
+					else
+					{
+						start.style.display="none";
+					}
 				}
 				renderer.render( scene, camera );
 			}
+
 		</script>
 	</body>
 </html>
