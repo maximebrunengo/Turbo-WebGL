@@ -1,0 +1,111 @@
+#gameOver {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    /*font-size: 6.0em;*/
+    color: white;
+    font-family: "Helvetica";
+    text-align: center;
+    background-color: rgba(0, 0, 0, 0.6);
+}
+
+#gameOverText {
+    position: absolute;
+    width: 100%;
+    top: 50%;
+    font-size: 6.0em;
+    margin-top: -50px;
+    cursor: default;
+}
+#gameoverSubtitleText {
+    position: absolute;
+    width: 100%;
+    top: 50%;
+    font-size: 2.0em;
+    margin-top: 50px;
+    cursor: default;
+}
+#scoreEnd {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  color: white;
+  font-family: "Helvetica";
+  text-align: center;
+}
+
+#scoreEndText {
+    position: absolute;
+    width: 100%;
+    top: 50%;
+    font-size: 2.5em;
+    margin-top: 200px;
+    cursor: default;
+}
+
+#start {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  /*font-size: 6.0em;*/
+  color: white;
+  font-family: "Helvetica";
+  text-align: center;
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+#startText {
+  position: absolute;
+  width: 100%;
+  top: 50%;
+  font-size: 6.0em;
+  margin-top: -100px;
+  cursor: default;
+}
+#startSubtitleText {
+    position: absolute;
+    width: 100%;
+    top: 50%;
+    font-size: 2.0em;
+    cursor: default;
+}
+
+#pause {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  /*font-size: 6.0em;*/
+  color: white;
+  font-family: "Helvetica";
+  text-align: center;
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+#pauseText {
+  position: absolute;
+  width: 100%;
+  top: 50%;
+  font-size: 6.0em;
+  margin-top: -50px;
+  cursor: default;
+}
+
+#scoreDisplay {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  font-size: 2.0em;
+  /*margin-top: 50px;
+  margin-left: 50px;*/
+  color: white;
+  font-family: "Helvetica";
+  text-align: left;
+  margin-top: -300px;
+  /*background-color: rgba(0, 0, 0, 0.7);*/
+}
+#scoreText {
+  position: absolute;
+  width: 100%;
+  top: 50%;
+  cursor: default;
+}
